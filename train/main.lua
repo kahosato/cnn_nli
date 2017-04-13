@@ -48,6 +48,9 @@ function main.argparse()
 
    -- Options
    cmd:option("-resume",0,"Resumption point in epoch. 0 means not resumption.")
+   cmd:option("-window", 1014, "Window size")
+   cmd:option("-useWindow", false, "Whether you want to use window")
+   cmd:option("-aug", false, "Data augmentation using thesauras.")
    cmd:text()
    
    -- Parse the option
@@ -78,6 +81,18 @@ function main.argparse()
 	 print("Disabled randomization for resumption")
       end
    end
+
+   -- Data augmentation using thesauras
+   config.train_data.aug = opt.aug
+   config.val_data.aug = opt.aug
+
+   -- Window size 
+   config.train_data.window_size = opt.window
+   config.val_data.window_size = opt.window
+
+   -- use window 
+   config.train_data.use_window = opt.useWindow
+   config.val_data.use_window = opt.useWindow
 
    return opt
 end

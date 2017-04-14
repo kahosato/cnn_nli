@@ -239,9 +239,17 @@ function main.save()
 
    -- Make the save
    local time = os.time()
-   torch.save(paths.concat(config.main.save,"main_"..(main.train.epoch-1).."_"..time..".t7b"),
+   if config.train_data.use_window:
+      local main_filename = paths.concat(config.main.save,"main_"..(main.train.epoch-1).."_"..time.."_"..(config.train_data.window_size)..".t7b")
+      local seq_filename = paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time.."_"..(config.train_data.window_size)..".t7b") 
+
+   else:
+      local main_filename = paths.concat(config.main.save,"main_"..(main.train.epoch-1).."_"..time..".t7b")
+      local seq_filename = paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time..".t7b") 
+   end
+   torch.save(main_filename,
 	      {config = config, record = main.record, momentum = main.train.old_grads:double()})
-   torch.save(paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time..".t7b"),
+   torch.save(seq_filename,
 	      main.model:clearSequential(main.model:makeCleanSequential(main.model.sequential)))
    -- main.eps_error = main.eps_error or gnuplot.epsfigure(paths.concat(config.main.save,"figure_error.eps"))
    -- main.eps_loss = main.eps_loss or gnuplot.epsfigure(paths.concat(config.main.save,"figure_loss.eps"))

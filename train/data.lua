@@ -154,7 +154,7 @@ function Data:iterator(static, data)
 	   s = s.." "..ffi.string(torch.data(data.content:narrow(1, data.index[i][j][l], 1)))
 	end
 	if self.use_window then
-	  local data = self.chooseWindow(s, self.length, inputs:select(1, k))
+	  local data = self:chooseWindow(s, self.length, inputs:select(1, k))
 	else 
 	  local data = self:stringToTensor(s, self.length, inputs:select(1, k))
 	end
@@ -184,11 +184,8 @@ function Data:chooseWindow(str, l, input, p)
    local t = input or torch.Tensor(#self.alphabet, l)
    t:zero()
    start = math.random(1, math.max(#s - l + 1, 1))
-   print(str)
-   print(start)
    for w_i = 1, l, 1 do
       s_i = start + w_i - 1
-      print(s:sub(s_i,s_i))
 	  if self.dict[s:sub(s_i,s_i)] then
 	t[self.dict[s:sub(s_i,s_i)]][w_i] = 1
 	  end

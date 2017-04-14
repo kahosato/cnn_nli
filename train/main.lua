@@ -106,6 +106,10 @@ function main.new()
 
    -- Load the model
    print("Loading the model...")
+   full_input_size = ((main.train_data.length - 96) / 27 ) * 256
+   config.model[16] = {module = "nn.Reshape", size = full_input_size}
+   config.model[17] = {module = "nn.Linear", inputSize = full_input_size, outputSize = 1024}
+
    main.model = Model(config.model)
    if config.main.randomize then
       main.model:randomize(config.main.randomize)

@@ -12,7 +12,7 @@ local alphabet = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+-
 
 -- Training data
 config.train_data = {}
-config.train_data.file = "/Users/kaho/projects/l1_edc/l1_detect/data/cnn/training.t7b" 
+config.train_data.file = paths.concat(paths.cwd(), "../data/train.t7b")
 config.train_data.alphabet = alphabet
 config.train_data.length = 1014
 config.train_data.batch_size = 128

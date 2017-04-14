@@ -16,6 +16,7 @@ function Data:__init(config)
    for i = 1,#self.alphabet do
 	  self.dict[self.alphabet:sub(i,i)] = i
    end
+   self.use_window = config.use_window
    if self.use_window then
 	  self.length = config.window_size
    else
@@ -182,10 +183,14 @@ function Data:chooseWindow(str, l, input, p)
    local l = l or #s
    local t = input or torch.Tensor(#self.alphabet, l)
    t:zero()
-   start = math.random(1, max(#s - l + 1, 1))
-   for i = math.min(#s, start + l - 1), start, -1 do
-	  if self.dict[s:sub(i,i)] then
-	t[self.dict[s:sub(i,i)]][#s - i + 1] = 1
+   start = math.random(1, math.max(#s - l + 1, 1))
+   print(str)
+   print(start)
+   for w_i = 1, l, 1 do
+      s_i = start + w_i - 1
+      print(s:sub(s_i,s_i))
+	  if self.dict[s:sub(s_i,s_i)] then
+	t[self.dict[s:sub(s_i,s_i)]][w_i] = 1
 	  end
    end
    return t

@@ -7,14 +7,14 @@ By Xiang Zhang @ New York University
 require("nn")
 require("cutorch")
 require("cunn")
-require("gnuplot")
+-- require("gnuplot")
 
 -- Local requires
 require("data")
 require("model")
 require("train")
 require("test")
-require("mui")
+-- require("mui")
 
 -- Configurations
 dofile("config.lua")
@@ -131,12 +131,12 @@ function main.new()
       local resume = torch.load(config.main.resume)
       main.record = resume.record
       if resume.momentum then main.train.old_grads:copy(resume.momentum) end
-      main.show()
+      -- main.show()
    end
 
    -- The visualization
-   main.mui = Mui{width=config.mui.width,scale=config.mui.scale,n=config.mui.n,title="Model Visualization"}
-   main.draw()
+   -- main.mui = Mui{width=config.mui.width,scale=config.mui.scale,n=config.mui.n,title="Model Visualization"}
+   -- main.draw()
    collectgarbage()
 end
 
@@ -176,9 +176,9 @@ function main.run()
       end
       
       print("Visualizing loss")
-      main.show()
+      -- main.show()
       print("Visualizing the models")
-      main.draw()
+      -- main.draw()
       print("Saving data")
       main.save()
       collectgarbage()
@@ -188,7 +188,7 @@ end
 -- Final cleaning up
 function main.clean()
    print("Cleaning up...")
-   gnuplot.closeall()
+   -- gnuplot.closeall()
 end
 
 -- Draw the graph
@@ -239,9 +239,9 @@ function main.save()
 	      {config = config, record = main.record, momentum = main.train.old_grads:double()})
    torch.save(paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time..".t7b"),
 	      main.model:clearSequential(main.model:makeCleanSequential(main.model.sequential)))
-   main.eps_error = main.eps_error or gnuplot.epsfigure(paths.concat(config.main.save,"figure_error.eps"))
-   main.eps_loss = main.eps_loss or gnuplot.epsfigure(paths.concat(config.main.save,"figure_loss.eps"))
-   main.show(main.eps_error,main.eps_loss)
+   -- main.eps_error = main.eps_error or gnuplot.epsfigure(paths.concat(config.main.save,"figure_error.eps"))
+   -- main.eps_loss = main.eps_loss or gnuplot.epsfigure(paths.concat(config.main.save,"figure_loss.eps"))
+   -- main.show(main.eps_error,main.eps_loss)
    local ret = pcall(function() main.mui.win:save(paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time..".png")) end)
    if not ret then print("Warning: saving the model image failed") end
    collectgarbage()
@@ -285,7 +285,7 @@ function main.trainlog(train)
 	    ", osd: "..string.format("%.2e",train.old_grads:std())..
 	    ", omi: "..string.format("%.2e",train.old_grads:min())..
 	    ", omx: "..string.format("%.2e",train.old_grads:max())
-	 main.draw()
+	 -- main.draw()
       end
       
       if config.main.details or config.main.debug then

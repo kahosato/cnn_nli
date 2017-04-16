@@ -55,7 +55,7 @@ end
 -- Run for a number of steps
 -- epoches: number of epoches
 -- logfunc: (optional) a function to execute after each step.
-function Train:run(epoches,logfunc)
+function Train:run(epoches,logfunc,output)
    -- Recapture the weights
    if self.recapture then
       self.params,self.grads = nil,nil
@@ -66,7 +66,7 @@ function Train:run(epoches,logfunc)
    -- The loop
    for i = 1,epoches do
       self:batchStep()
-      if logfunc then logfunc(self,i) end
+      if logfunc then logfunc(self,i,output) end
    end
 end
 

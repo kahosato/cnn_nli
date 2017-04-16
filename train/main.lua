@@ -156,7 +156,10 @@ function main.run()
 	 main.model:disableDropouts()
       end
       print("Training for era "..i)
-      main.train:run(config.main.epoches, main.trainlog)
+      local time = os.time()
+      local log_f = io.open("train_"..(config.main.epoches).."_"..time.."_"..(config.train_data.window_size)..".txt", 'w')
+      main.train:run(config.main.epoches, main.trainlog, log_f)
+      log_f:close()
 
       print("Disabling dropouts")
       main.model:disableDropouts()
@@ -239,13 +242,15 @@ function main.save()
 
    -- Make the save
    local time = os.time()
-   if config.train_data.use_window:
-      local main_filename = paths.concat(config.main.save,"main_"..(main.train.epoch-1).."_"..time.."_"..(config.train_data.window_size)..".t7b")
-      local seq_filename = paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time.."_"..(config.train_data.window_size)..".t7b") 
+   local main_filename = nil
+   local seq_filename = nil
+   if config.train_data.use_window then
+      main_filename = paths.concat(config.main.save,"main_"..(main.train.epoch-1).."_"..time.."_"..(config.train_data.window_size)..".t7b")
+      seq_filename = paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time.."_"..(config.train_data.window_size)..".t7b") 
 
-   else:
-      local main_filename = paths.concat(config.main.save,"main_"..(main.train.epoch-1).."_"..time..".t7b")
-      local seq_filename = paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time..".t7b") 
+   else
+      main_filename = paths.concat(config.main.save,"main_"..(main.train.epoch-1).."_"..time..".t7b")
+      seq_filename = paths.concat(config.main.save,"sequential_"..(main.train.epoch-1).."_"..time..".t7b") 
    end
    torch.save(main_filename,
 	      {config = config, record = main.record, momentum = main.train.old_grads:double()})
@@ -260,7 +265,7 @@ function main.save()
 end
 
 -- The training logging function
-function main.trainlog(train)
+function main.trainlog(train, i, output)
    if config.main.collectgarbage and math.fmod(train.epoch-1,config.main.collectgarbage) == 0 then
       print("Collecting garbage at epoch = "..(train.epoch-1))
       collectgarbage()
@@ -302,6 +307,8 @@ function main.trainlog(train)
       
       if config.main.details or config.main.debug then
 	 print(msg)
+         output:write(msg)
+         output:write("\n")
       end
 
       main.clock.log = os.time()

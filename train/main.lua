@@ -85,14 +85,18 @@ function main.argparse()
    -- Data augmentation using thesauras
    config.train_data.aug = opt.aug
    config.val_data.aug = opt.aug
+   config.val_data.aug = opt.aug
+
 
    -- Window size 
    config.train_data.window_size = opt.window
    config.val_data.window_size = opt.window
+   config.tune_data.window_size = opt.window
 
    -- use window 
    config.train_data.use_window = opt.useWindow
    config.val_data.use_window = opt.useWindow
+   config.tune_data.use_window = opt.useWindow
 
    return opt
 end
@@ -103,6 +107,7 @@ function main.new()
    print("Loading datasets...")
    main.train_data = Data(config.train_data)
    main.val_data = Data(config.val_data)
+   main.tune_data = Data(config.tune_data)
 
    -- Load the model
    print("Loading the model...")
@@ -127,7 +132,7 @@ function main.new()
    print("Loading the tester...")
    main.test_train = Test(main.train_data, main.model, config.loss(), config.test)
    main.test_val = Test(main.val_data, main.model, config.loss(), config.test)
-
+   main.test_tune = Test(main.tune_data, main.model, config.loss(), config.tune)
    -- The record structure
    main.record = {}
    if config.main.resume then
@@ -306,6 +311,7 @@ function main.trainlog(train, i, output)
       end
       
       if config.main.details or config.main.debug then
+         msg = msg..", val_err:"..string.format("%.2e", ain.test_tune:run().error)
 	 print(msg)
          output:write(msg)
          output:write("\n")

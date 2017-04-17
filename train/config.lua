@@ -12,7 +12,7 @@ local alphabet = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+-
 
 -- Training data
 config.train_data = {}
-config.train_data.file = paths.concat(paths.cwd(), "../data/train.t7b")
+config.train_data.file = paths.concat(paths.cwd(), "../data/train_v.t7b")
 config.train_data.alphabet = alphabet
 config.train_data.length = 1014 
 config.train_data.batch_size = 128
@@ -21,8 +21,16 @@ config.train_data.batch_size = 128
 config.val_data = {}
 config.val_data.file =  paths.concat(paths.cwd(), "../data/test.t7b")
 config.val_data.alphabet = alphabet
-config.val_data.length =1014 
+config.val_data.length = 1014 
 config.val_data.batch_size = 128
+
+-- Tuning data
+config.tune_data = {}
+config.val_data.file =  paths.concat(paths.cwd(), "../data/val.t7b")
+config.val_data.alphabet = alphabet
+config.val_data.length = 1014 
+config.val_data.batch_size = 128
+
 
 -- The model
 config.model = {}
@@ -97,3 +105,7 @@ config.main.collectgarbage = 100
 config.main.logtime = 5
 config.main.debug = false
 config.main.test = true
+
+config.tune = {}
+config.test.confusion = true
+

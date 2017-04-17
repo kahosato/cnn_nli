@@ -14,16 +14,14 @@ local alphabet = "abcdefghijklmnopqrstuvwxyz0123456789-,;.!?:'\"/\\|_@#$%^&*~`+-
 config.train_data = {}
 config.train_data.file = paths.concat(paths.cwd(), "../data/train.t7b")
 config.train_data.alphabet = alphabet
-config.train_data.length = 987
--- config.train_data.length = 1014 
+config.train_data.length = 1014 
 config.train_data.batch_size = 128
 
 -- Validation data
 config.val_data = {}
 config.val_data.file =  paths.concat(paths.cwd(), "../data/test.t7b")
 config.val_data.alphabet = alphabet
-config.val_data.length = 987
--- config.val_data.length =1014 
+config.val_data.length =1014 
 config.val_data.batch_size = 128
 
 -- The model
@@ -89,7 +87,7 @@ config.mui.n = 16
 config.main = {}
 config.main.type = "torch.CudaTensor"
 config.main.eras = 1
-config.main.epoches = 2500 
+config.main.epoches = 3 
 config.main.randomize = 5e-2
 config.main.dropout = true
 config.main.save = paths.concat(paths.cwd())
